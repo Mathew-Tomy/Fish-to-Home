@@ -13,7 +13,10 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>example</string>
+	<string>Fish To Home</string>
+	<key>CFBundleDisplayName</key>
+    <string>Fish To Home</string>
+
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
