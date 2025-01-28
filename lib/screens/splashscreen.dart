@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:glitzy/screens/login_screen.dart';
+import 'package:fishtohome/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

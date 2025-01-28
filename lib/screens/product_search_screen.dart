@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/modals/Searchproducts_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/screens/product_detail_screen.dart';
-import 'package:glitzy/widgets/back_button_widget.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/modals/Searchproducts_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/screens/product_detail_screen.dart';
+import 'package:fishtohome/widgets/back_button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
 class Searchproduct extends StatefulWidget {
   const Searchproduct({Key? key}) : super(key: key);
 

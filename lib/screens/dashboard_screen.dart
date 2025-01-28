@@ -1,21 +1,21 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/modals/Banner_modal.dart';
-import 'package:glitzy/screens/list/catalog_product_list.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/modals/Banner_modal.dart';
+import 'package:fishtohome/screens/list/catalog_product_list.dart';
 import '../modals/Headerimages_modal.dart';
 import '../modals/Category_modal.dart';
-import 'package:glitzy/modals/Category_product_modal.dart';
-import 'package:glitzy/modals/Catalog_products_modal.dart';
-import 'package:glitzy/modals/Best_products_modal.dart';
-import 'package:glitzy/screens/product_detail_screen.dart';
-import 'package:glitzy/screens/list/cart_list_screen.dart';
-import 'package:glitzy/screens/list/best_product_list_screen.dart';
+import 'package:fishtohome/modals/Category_product_modal.dart';
+import 'package:fishtohome/modals/Catalog_products_modal.dart';
+import 'package:fishtohome/modals/Best_products_modal.dart';
+import 'package:fishtohome/screens/product_detail_screen.dart';
+import 'package:fishtohome/screens/list/cart_list_screen.dart';
+import 'package:fishtohome/screens/list/best_product_list_screen.dart';
 import '../modals/Feature_products_modal.dart';
-import 'package:glitzy/screens/list/wishlist_products_screen.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
+import 'package:fishtohome/screens/list/wishlist_products_screen.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -24,18 +24,18 @@ import 'package:http/http.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_rounded_progress_bar/flutter_rounded_progress_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:glitzy/screens/product_search_screen.dart';
-import 'package:glitzy/screens/list/category_list_screen.dart';
-//import 'package:glitzy/screens/list/subcategory_list_screen.dart';
-import 'package:glitzy/screens/list/address_book_list_screen.dart';
-import 'package:glitzy/screens/list/orders_list_screen.dart';
-//import 'package:glitzy/screens/list/order_return_list_screen.dart';
-// import 'package:glitzy/screens/list/profile_view_screen.dart';
-import 'package:glitzy/screens/password_change_screen.dart';
+import 'package:fishtohome/screens/product_search_screen.dart';
+import 'package:fishtohome/screens/list/category_list_screen.dart';
+//import 'package:fishtohome/screens/list/subcategory_list_screen.dart';
+import 'package:fishtohome/screens/list/address_book_list_screen.dart';
+import 'package:fishtohome/screens/list/orders_list_screen.dart';
+//import 'package:fishtohome/screens/list/order_return_list_screen.dart';
+// import 'package:fishtohome/screens/list/profile_view_screen.dart';
+import 'package:fishtohome/screens/password_change_screen.dart';
 import '../../../constants.dart';
 import '../screens/list/category_product_list.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:glitzy/screens/list/horizontal_listview.dart';
+import 'package:fishtohome/screens/list/horizontal_listview.dart';
 import 'dart:ui'; // Import this for Color class
 
 
@@ -356,20 +356,79 @@ _getHeaderImagesData() async {
               ],
             ),
             SizedBox(height: 85,),
-            Container(
-              height: 85,
-              color: Colors.black,
-              child: Column(
-                children: [
-                  SizedBox(height: 3,),
-                  Center(child: Text('Fish To Hom 3080 Dorchester road Niagara Falls Ontario, L2J 2Z7,',style: TextStyle(color: Colors.white),)),
-                  SizedBox(height: 5,),
-
-                  Center(child: Text('Phone : +1 647 470 8577, Email : info@fishtohome.ca',style: TextStyle(fontSize: 12,color: Colors.white),)),
-                ],
-              ),
+      Container(
+        height: 170,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black, Colors.grey[900]!],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(0, 3),
+              blurRadius: 6,
             ),
           ],
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.location_on, color: Colors.redAccent, size: 20),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '3080 Dorchester Road, Niagara Falls, Ontario, L2J 2Z7',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(Icons.phone, color: Colors.greenAccent, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  '+1 647 470 8577',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(Icons.email, color: Colors.blueAccent, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  'info@fishtohome.ca',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+
+      ],
         ),
       ),
       appBar: AppBar(

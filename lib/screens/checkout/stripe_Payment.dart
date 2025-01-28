@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/.env.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/.env.dart';
 
 class StripeCheckout extends StatefulWidget {
   final String totalAmount;

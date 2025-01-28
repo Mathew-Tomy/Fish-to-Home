@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/restAPI/API.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/restAPI/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
 class Passwordchange extends StatefulWidget {
   const Passwordchange({Key? key}) : super(key: key);
 

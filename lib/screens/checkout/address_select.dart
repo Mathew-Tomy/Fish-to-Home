@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'package:glitzy/modals/Addressbook_modal.dart';
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/modals/Addressbook_modal.dart';
-import 'package:glitzy/modals/Cart_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/screens/checkout/payment_method_select.dart';
+import 'package:fishtohome/modals/Addressbook_modal.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/modals/Addressbook_modal.dart';
+import 'package:fishtohome/modals/Cart_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/screens/checkout/payment_method_select.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view_address_screen.dart';
 import '../add_address_screen.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
 // import 'order_checkout.dart';
 
 class CheckoutAddress extends StatefulWidget {
@@ -264,11 +264,17 @@ class _CheckoutAddressState extends State<CheckoutAddress> {
         if (selectedAddress == null) {
           showSnackbar('Select delivery address');
         } else if (selectedAddress!.customer_address_1 == null ||
+            selectedAddress!.customer_address_1!.isEmpty ||
             selectedAddress!.customer_address_2 == null ||
+            selectedAddress!.customer_address_2!.isEmpty ||
             selectedAddress!.zip == null ||
+            selectedAddress!.zip!.isEmpty ||
             selectedAddress!.country == null ||
-            selectedAddress!.state== null ||
-            selectedAddress!.city == null) {
+            selectedAddress!.country!.isEmpty ||
+            selectedAddress!.state == null ||
+            selectedAddress!.state!.isEmpty ||
+            selectedAddress!.city == null ||
+            selectedAddress!.city!.isEmpty) {
           showSnackbar('Please update your address');
         } else {
           // Navigate to Paymentselect page
@@ -297,6 +303,7 @@ class _CheckoutAddressState extends State<CheckoutAddress> {
       ),
     );
   }
+
 
 
 

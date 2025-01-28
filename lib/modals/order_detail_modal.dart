@@ -122,6 +122,7 @@ class Product {
   String? quantity;
   String? price;
   String? totalPrice;
+  String? onsale_price;
 
   Product({
     this.productId,
@@ -130,6 +131,7 @@ class Product {
     this.quantity,
     this.price,
     this.totalPrice,
+    this.onsale_price,
   });
 
   Product.fromJson(Map<String, dynamic> json) {
@@ -139,6 +141,7 @@ class Product {
     quantity = json['quantity'];
     price = json['price'];
     totalPrice = json['total_price'];
+    onsale_price = json['onsale_price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -149,6 +152,7 @@ class Product {
     data['quantity'] = quantity;
     data['price'] = price;
     data['total_price'] = totalPrice;
+    data['onsale_price'] = onsale_price;
     return data;
   }
 }

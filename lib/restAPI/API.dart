@@ -1,6 +1,6 @@
 class ApiUrl{
 
-  static const String baseURL = "https://fishtohome.ca/web/";
+  static const String baseURL = "https://fishtohome.ca/";
   
   static const String demoUser = "demouser";
   static const String apiKey = "dSmyc8dV77yogTbfpmIJyh97mba3llqaJWlf4GP9";
@@ -66,5 +66,6 @@ static const String StripeCheckout = baseURL + 'api/checkout';
   static const String countries = baseURL + 'api/countries'; // Adjusted for PHP API endpoint
   static const String states = baseURL + 'api/state';
   static const String cities = baseURL + 'api/zipcode';
+
 
 }

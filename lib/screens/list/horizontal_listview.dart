@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:glitzy/modals/Category_modal.dart';
+import 'package:fishtohome/modals/Category_modal.dart';
 import 'category_product_list.dart';
-import 'package:glitzy/restAPI/API.dart';
+import 'package:fishtohome/restAPI/API.dart';
 class HorizontalList extends StatefulWidget {
   const HorizontalList({Key? key}) : super(key: key);
 

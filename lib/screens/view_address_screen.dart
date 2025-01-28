@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/modals/Addressbook_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/modals/Addressbook_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:glitzy/modals/Cities_modal.dart';
-import 'package:glitzy/modals/Countries_modal.dart';
-import 'package:glitzy/modals/States_modal.dart';
+import 'package:fishtohome/modals/Cities_modal.dart';
+import 'package:fishtohome/modals/Countries_modal.dart';
+import 'package:fishtohome/modals/States_modal.dart';
 import 'dashboard_screen.dart';
 
 class Viewaddress extends StatefulWidget {

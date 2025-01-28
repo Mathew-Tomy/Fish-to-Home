@@ -1,9 +1,9 @@
 import 'dart:convert';
-
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/screens/login_screen.dart';
-import 'package:glitzy/widgets/back_button_widget.dart';
+import 'package:fishtohome/modals/Cities_modal.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/screens/login_screen.dart';
+import 'package:fishtohome/widgets/back_button_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -16,13 +16,31 @@ class Signupscreen extends StatefulWidget {
 }
 
 class _SignupscreenState extends State<Signupscreen> {
+  List<Cities> ?cities=[];
 
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+  void _initializeData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await _getCities();
+    setState(() {
+      isLoading = false;
+    });
+  }
   String ?email;
   String ?password;
   String ?confirmpassword;
   String ?firstName;
   String ?lastName;
   String ?telephone;
+  String? city;
+  String? selectedCity;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool isLoading  =  false;
 
@@ -40,6 +58,42 @@ class _SignupscreenState extends State<Signupscreen> {
     _register(context);
 
 
+  }
+  _getCities() async {
+
+
+    String url = '${ApiUrl.cities}'; // Use the POST endpoint URL
+    setState(() {
+      isLoading = true;
+
+    });
+
+    try {
+      Response response = await get(Uri.parse(url), headers: {
+        "Content-Type": "application/json",
+      });
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        if (responseData['cities'] != null) {
+          List<dynamic> cityData = responseData['cities'];
+
+          setState(() {
+            cities = cityData.map((city) => Cities.fromJson(city)).toList();
+            isLoading = false;
+          });
+        } else {
+          print('No cities found in the response');
+        }
+      } else {
+        print('Failed to fetch countries. HTTP Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -222,6 +276,42 @@ class _SignupscreenState extends State<Signupscreen> {
               },
             ),
           ),
+          SizedBox(height: 20,),
+          // DropdownButtonFormField styled like the password TextFormField
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0, right: 10),
+            child: DropdownButtonFormField<String>(
+              value: selectedCity,
+              items: cities?.map((city) {
+                return DropdownMenuItem<String>(
+                  value: city.name,
+                  child: Text(city.name ?? ''),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedCity = value;
+                  city = value; // Ensure the variable is updated
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'City',
+                labelStyle: TextStyle(color: Colors.grey),
+                hintText: 'Select your city',
+                enabledBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+              ),
+            ),
+          ),
+
           SizedBox(height: 25,),
           Padding(
             padding: const EdgeInsets.only(left:10.0,right: 10),
@@ -337,6 +427,7 @@ class _SignupscreenState extends State<Signupscreen> {
           'password': password,
           'first_name': firstName,
           'last_name': lastName,
+          'city': selectedCity ?? '',
         }),
       );
 

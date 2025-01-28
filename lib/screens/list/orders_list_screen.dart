@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/modals/Order_list_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/screens/order_summary_screen.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/modals/Order_list_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/screens/order_summary_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
  import 'package:intl/intl.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
-// import 'package:glitzy/config/theme.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
+// import 'package:fishtohome/config/theme.dart';
 class Ordrslist extends StatefulWidget {
   const Ordrslist({Key? key}) : super(key: key);
 
@@ -168,7 +168,10 @@ class _OrdrslistState extends State<Ordrslist> {
                     'Order date: ${formattedDate(orders[index].order_date!)}',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-
+                  Text(
+                    'Order ID: ${formattedDate(orders[index].orderId!)}',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                   Text(
                     'Customer Name: ${orders[index].customer_name!}',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),

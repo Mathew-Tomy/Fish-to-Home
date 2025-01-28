@@ -1,5 +1,5 @@
 
-import 'package:glitzy/colors/Colors.dart';
+import 'package:fishtohome/colors/Colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -4,8 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/.env.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/.env.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
@@ -83,7 +83,7 @@ class StripeCheckouts extends StatefulWidget {
           paymentIntentClientSecret: paymentIntentData!['client_secret'],
           customFlow: true,
           style: ThemeMode.dark,
-          merchantDisplayName: 'Glitzy',
+          merchantDisplayName: 'fishtohome',
         ),
       )
           .then((value) {

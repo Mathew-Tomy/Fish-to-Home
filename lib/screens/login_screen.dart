@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/data/sharedpreferences.dart';
-import 'package:glitzy/modals/User_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
-import 'package:glitzy/screens/signup_screen.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/data/sharedpreferences.dart';
+import 'package:fishtohome/modals/User_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
+import 'package:fishtohome/screens/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -104,7 +104,7 @@ class _LoginscreenState extends State<Loginscreen> {
           showSnackbar('Invalid email or password');
         }
       } else {
-        showSnackbar('Failed to connect to server. Please try again.');
+        showSnackbar('Invalid email or password');
       }
     } catch (e) {
       print('Error during login: $e');

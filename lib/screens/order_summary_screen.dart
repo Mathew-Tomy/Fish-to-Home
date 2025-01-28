@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/modals/order_detail_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/modals/order_detail_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:glitzy/screens/product_detail_screen.dart';
-import 'package:glitzy/screens/product_return.dart';
+import 'package:fishtohome/screens/product_detail_screen.dart';
+import 'package:fishtohome/screens/product_return.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
 
 class Ordersummary extends StatefulWidget {
 
@@ -56,6 +56,7 @@ class _OrdersummaryState extends State<Ordersummary> {
                   _tableHeader('Model'),
                   _tableHeader('Quantity'),
                   _tableHeader('Price'),
+
                   _tableHeader('Total'),
                 ],
               ),
@@ -344,7 +345,7 @@ class _OrdersummaryState extends State<Ordersummary> {
   // _paymentMethodOnline() {
   //   return ListTile(
   //     leading: Image.network(
-  //       'https://glitzystudio.ca/assets/images/1601930611stripe-logo-blue.png',
+  //       'https://fishtohomestudio.ca/assets/images/1601930611stripe-logo-blue.png',
   //       width: 50,
   //       height: 50,
   //     ),

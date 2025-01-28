@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
- package="com.example.glitzy">
+ package="com.example.fishtohome">
 
     <application
-        android:label="fishtohome"
+        android:label="Fish To Home"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true"

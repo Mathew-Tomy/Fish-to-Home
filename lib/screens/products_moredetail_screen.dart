@@ -1,21 +1,21 @@
 import 'dart:convert';
 import '../../../constants.dart';
-import 'package:glitzy/colors/Colors.dart';
-import 'package:glitzy/modals/Productdetail_modal.dart';
-import 'package:glitzy/restAPI/API.dart';
+import 'package:fishtohome/colors/Colors.dart';
+import 'package:fishtohome/modals/Productdetail_modal.dart';
+import 'package:fishtohome/restAPI/API.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart'; // Import HTML parser
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
-import 'package:glitzy/screens/list/category_product_list.dart';
-import 'package:glitzy/screens/list/subcategory_product_list.dart';
+import 'package:fishtohome/screens/list/category_product_list.dart';
+import 'package:fishtohome/screens/list/subcategory_product_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:glitzy/widgets/footer_widget.dart';
+import 'package:fishtohome/widgets/footer_widget.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 import 'list/cart_list_screen.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:glitzy/screens/top_rounded_container.dart';
+import 'package:fishtohome/screens/top_rounded_container.dart';
 class Productmoredetail extends StatefulWidget {
 
 
