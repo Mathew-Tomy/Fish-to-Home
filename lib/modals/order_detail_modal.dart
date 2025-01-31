@@ -40,6 +40,10 @@ class Order {
   String? customerEmail;
   String? paymentMethod;
   String? zip;
+  String? delivery_date;
+  String? delivery_details;
+  String? delivery_photo;
+  String? delivery_status;
   List<Product>? products;  // Add this field
 
   Order({
@@ -58,34 +62,41 @@ class Order {
     this.customerEmail,
     this.paymentMethod,
     this.zip,
+    this.delivery_date,
+    this.delivery_photo,
+    this.delivery_details,
+    this.delivery_status,
     this.products,  // Add this to constructor
   });
 
   Order.fromJson(Map<String, dynamic> json) {
-    orderId = json['order_id'];
-    status = json['status'];
-    subTotal = json['Sub-Total']?.toDouble();
-    serviceAmount = json['service_amount'];
-    totalAmount = json['total_amount'];
-    orderDate = json['order_date'];
-    customerName = json['customer_name'];
-    customerShortAddress = json['customer_short_address'];
-    customerAddress1 = json['customer_address_1'];
-    customerAddress2 = json['customer_address_2'];
-    customerMobile = json['customer_mobile'];
-    customerEmail = json['customer_email'];
-    paymentMethod = json['paymentMethod'];
-    zip = json['zip'];
-    // Parse the list of products
-    if (json['products'] != null) {
-      products = [];
-      json['products'].forEach((v) {
-        products!.add(Product.fromJson(v));
-      });
-    }
-    // Parse products
+  orderId = json['order_id']?.toString();
+  status = json['status']?.toString();
+  subTotal = (json['Sub-Total'] != null) ? json['Sub-Total'].toDouble() : 0.0;
+  serviceAmount = json['service_amount']?.toString();
+  totalAmount = json['total_amount']?.toString();
+  orderDate = json['order_date'];
+  customerName = json['customer_name'];
+  customerShortAddress = json['customer_short_address'];
+  customerAddress1 = json['customer_address_1'];
+  customerAddress2 = json['customer_address_2'];
+  customerMobile = json['customer_mobile']?.toString();
+  customerEmail = json['customer_email'];
+  paymentMethod = json['paymentMethod'];
+  zip = json['zip'];
+  delivery_date = json['delivery_date'] ?? "";
+  delivery_details = json['delivery_details'] ?? "";
+  delivery_photo = json['delivery_photo'] ?? "";
+  delivery_status = json['delivery_status']?.toString(); // Convert to String
 
+  // Parse the list of products safely
+  if (json['products'] != null) {
+    products = [];
+    json['products'].forEach((v) {
+      products!.add(Product.fromJson(v));
+    });
   }
+}
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -103,6 +114,10 @@ class Order {
     data['customer_email'] = customerEmail;
     data['paymentMethod'] = paymentMethod;
     data['zip'] = zip;
+    data['delivery_date']=delivery_date;
+    data['delivery_photo']=delivery_photo;
+    data['delivery_details']=delivery_details;
+    data['delivery_status']=delivery_status;
     // Add products to JSON
     if (products != null) {
       data['products'] = products!.map((v) => v.toJson()).toList();

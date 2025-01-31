@@ -168,8 +168,8 @@ class _OrdersummaryState extends State<Ordersummary> {
           ),
           _totalAmount(),
           SizedBox(height: 10,),
-
-
+         _delivery(),
+          SizedBox(height: 10,),
         ],
 
       ),
@@ -335,7 +335,87 @@ class _OrdersummaryState extends State<Ordersummary> {
     );
   }
 
+Widget _delivery() {
+  // Check if delivery details exist before displaying
+if (order.delivery_status == "0" || order.delivery_status!.isEmpty) {
 
+    return SizedBox(); // Hide delivery details if order is null or not delivered
+  }
+
+  return Card(
+    elevation: 5,
+    margin: EdgeInsets.all(12),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Order Pickup Details",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          _buildInfoCard(Icons.person, "Customer Name", order.customerName ?? "N/A"),
+          _buildInfoCard(Icons.numbers, "Order ID", order.orderId ?? "N/A"),
+          _buildInfoCard(Icons.calendar_today, "Delivery Date", order.delivery_date ?? "N/A"),
+          _buildInfoCard(Icons.description, "Details", order.delivery_details ?? "N/A"),
+          const SizedBox(height: 10),
+          _buildPhotoSection(order.delivery_photo),
+        ],
+      ),
+    ),
+  );
+}
+// 1️⃣ Add this inside `_OrdersummaryState`
+  Widget _buildInfoCard(IconData icon, String title, String value) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.blueAccent),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(value, style: const TextStyle(fontSize: 16)),
+      ),
+    );
+  }
+
+Widget _buildPhotoSection(String? deliveryPhoto) {
+  return Center(
+    child: Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            const Text(
+              "Delivery Photo",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            deliveryPhoto != null && deliveryPhoto.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      deliveryPhoto,
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.image_not_supported,
+                        size: 100,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  )
+                : const Text("No Image Available", style: TextStyle(color: Colors.grey)),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
 
   //
