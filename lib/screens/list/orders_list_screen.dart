@@ -176,7 +176,18 @@ class _OrdrslistState extends State<Ordrslist> {
                     'Customer Name: ${orders[index].customer_name!}',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
+                   Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: orders[index].status != null ? _getStatusColor(orders[index].status!) : Colors.grey,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      orders[index].status!= null ? _getStatusText(orders[index].status!) : 'N/A',
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -188,17 +199,7 @@ class _OrdrslistState extends State<Ordrslist> {
                         'Order Price: ${orders[index].total}',
                         style: TextStyle(fontSize: 14),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(orders[index].status.toString()), // Access status from individual Orders object
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          orders[index].status.toString(), // Access status from individual Orders object
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                      ),
+
                     ],
                   ),
                 ],
@@ -223,19 +224,30 @@ class _OrdrslistState extends State<Ordrslist> {
       },
     );
   }
+  String _getStatusText(String? status) {
+    switch (status) {
+      case '1':
+        return 'Pending';
+      case '2':
+        return 'Delivered';
+      default:
+        return 'Unknown';
+    }
+  }
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'Pending':
+      case '1':  // Status '1' means 'Pending'
         return Colors.orange;
-      case 'Delivered':
+      case '2':  // Status '2' means 'Delivered'
         return Colors.green;
-      case 'Cancelled':
+      case '3':  // Adding a possible 'Cancelled' status
         return Colors.red;
       default:
         return Colors.grey;
     }
   }
+
 
 
 }
