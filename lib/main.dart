@@ -4,12 +4,12 @@ import 'package:fishtohome/screens/list/cart_list_screen.dart';
 import 'package:fishtohome/screens/list/orders_list_screen.dart';
 import 'package:fishtohome/screens/list/wishlist_products_screen.dart';
 import 'package:fishtohome/screens/login_screen.dart';
-import 'package:fishtohome/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fishtohome/services/api_service.dart';
 import 'package:fishtohome/.env.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,13 +23,18 @@ Future<void> main() async {
       Stripe.publishableKey = publicKey;
     } else {
       print("Failed to fetch the public key. Using a fallback key.");
-      Stripe.publishableKey = stripePublishableKey;; // Replace with your fallback key if needed
+      Stripe.publishableKey = stripePublishableKey; // Replace with your fallback key if needed
     }
   } catch (e) {
     print("Error initializing the app: $e");
   }
 
-  runApp(const MyApp());
+  // Check if the user is logged in
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  // Run the app with the appropriate starting screen
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -41,9 +46,10 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final bool isLoggedIn;
 
-  // This widget is the root of your application.
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,7 +58,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Splashscreen(),
+      // Load the dashboard directly so users can browse products
+      home: Dashboard(),
       routes: {
         "/loginscreen": (context) => Loginscreen(),
         "/dashboard": (context) => Dashboard(),
