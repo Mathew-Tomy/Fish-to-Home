@@ -7,7 +7,9 @@ import 'package:fishtohome/screens/signup_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'dashboard_screen.dart';
 import 'forgot_password.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 
@@ -60,7 +62,6 @@ class _LoginscreenState extends State<Loginscreen> {
     String url = ApiUrl.login;
 
     try {
-      // Send the request with proper JSON encoding for the body
       Response response = await post(
         Uri.parse(url),
         headers: {
@@ -72,11 +73,9 @@ class _LoginscreenState extends State<Loginscreen> {
         }),
       );
 
-      // Check the response status code
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
-        // Check for success
         if (responseData['success'] == 'Login successful') {
           dynamic apiTokenData = responseData['api_token'];
           String? token;
@@ -95,8 +94,12 @@ class _LoginscreenState extends State<Loginscreen> {
               await Userpreferences().saveUser(address);
             }
 
-            // Navigate to the dashboard
-            Navigator.pushReplacementNamed(context, "/dashboard");
+            // Clear the back stack and navigate to the dashboard
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => Dashboard()),
+                  (Route<dynamic> route) => false,
+            );
           } else {
             showSnackbar('Invalid API session: Token missing');
           }
@@ -110,7 +113,6 @@ class _LoginscreenState extends State<Loginscreen> {
       print('Error during login: $e');
       showSnackbar('An error occurred. Please try again later.');
     } finally {
-      // Stop the loading spinner regardless of the result
       setState(() {
         isLoading = false;
       });
