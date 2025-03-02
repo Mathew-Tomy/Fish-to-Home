@@ -125,82 +125,84 @@ class _SearchproductState extends State<Searchproduct> {
     });
   }
   void _search() async {
-  setState(() {
-    isLoading = true;
-    products = []; // Clear any existing search results
-  });
+    setState(() {
+      isLoading = true;
+      products = []; // Clear any existing search results
+    });
 
-  String url = ApiUrl.search;
-  print('Search URL: $url');
+    String url = ApiUrl.search;
+    print('Search URL: $url');
 
-  Map<String, dynamic> requestBody = {
-    'search': _searchText,
-    'category': '', // Optionally include the category
-  };
+    Map<String, dynamic> requestBody = {
+      'search': _searchText,
+      'category': '', // Optionally include the category
+    };
 
-  try {
-    Response response = await post(
-      Uri.parse(url),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: json.encode(requestBody),
-    );
+    try {
+      Response response = await post(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: json.encode(requestBody),
+      );
 
-    print('Raw Response: ${response.body}');
-    print('Response Status Code: ${response.statusCode}');
+      print('Raw Response: ${response.body}');
+      print('Response Status Code: ${response.statusCode}');
 
-    // Check for successful response (status code 200)
-    if (response.statusCode == 200) {
-      // Ensure response is JSON
-      if (response.headers['content-type']?.contains('application/json') == true) {
-        try {
-          final Map<String, dynamic> responseData = json.decode(response.body);
+      // Check for successful response (status code 200)
+      if (response.statusCode == 200) {
+        // Ensure response is JSON
+        if (response.headers['content-type']?.contains('application/json') == true) {
+          try {
+            final Map<String, dynamic> responseData = json.decode(response.body);
 
-          // Check if the response contains 'items'
-          if (responseData.containsKey('items')) {
-            List<dynamic> search = responseData['items'];
-            
-            if (search.isNotEmpty) {
-              setState(() {
-                products = search.map((data) => Searchproducts.fromJson(data)).toList();
-                isLoading = false;
-              });
+            // Check if the response contains 'items'
+            if (responseData.containsKey('items')) {
+              List<dynamic> search = responseData['items'];
+
+              if (search.isNotEmpty) {
+                setState(() {
+                  products = search.map((data) => Searchproducts.fromJson(data)).toList();
+                  isLoading = false;
+                });
+              } else {
+                setState(() {
+                  isLoading = false;
+                });
+                print('No products found.');
+              }
             } else {
               setState(() {
                 isLoading = false;
               });
-              showSnackbar('No products found.');
+              print('Response missing "items" key: $responseData');
+              print('No items found in the response.');
             }
-          } else {
-            setState(() {
-              isLoading = false;
-            });
-            print('Response missing "items" key: $responseData');
-            showSnackbar('No items found in the response.');
+          } catch (e) {
+            print('JSON Decoding Error: $e');
+            showSnackbar('Invalid server response format.');
           }
-        } catch (e) {
-          print('JSON Decoding Error: $e');
-          showSnackbar('Invalid server response format.');
+        } else {
+          print('Expected JSON response, received: ${response.headers['content-type']}');
+          print('Server error: Received unexpected data format.');
         }
-      } else {
-        print('Expected JSON response, received: ${response.headers['content-type']}');
-        showSnackbar('Server error: Received unexpected data format.');
-      }
-    } 
-    // else {
-    //   print('HTTP Error: Status code ${response.statusCode}');
-    //   showSnackbar('Server error. Please try again.');
-    // }
-  } catch (error) {
-    print('Network Error: $error');
-    showSnackbar('An error occurred. Please check your connection.');
-  } finally {
-    setState(() {
-      isLoading = false;
-    });
+      } 
+      // else {
+      //   print('HTTP Error: Status code ${response.statusCode}');
+      //   showSnackbar('Server error. Please try again.');
+      // }
+    } catch (error) {
+      print('Network Error: $error');
+      showSnackbar('An error occurred. Please check your connection.');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
-}
+
+
 
 
 
