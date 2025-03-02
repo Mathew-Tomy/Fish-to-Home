@@ -14,7 +14,7 @@ static const String forgotPassword = baseURL + 'api/forgot';
 static const String accountUpdate = baseURL + 'api/changepassword';
 static const String registration = baseURL + 'api/register';
 static const String verifyLink = baseURL + 'api/verify_token'; // Updated to match PHP route
-
+static const String accountDelete = baseURL + 'api/delete-account'; // Updated to match PHP route
 // Product routes
 static const String productdetail = baseURL + 'api/products'; 
 static const String products = baseURL + 'api/products-all';
