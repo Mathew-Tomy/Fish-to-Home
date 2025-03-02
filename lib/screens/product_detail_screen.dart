@@ -392,12 +392,12 @@ class _ProductdetailState extends State<Productdetail> {
           Expanded(
             flex: 1,
             child: GestureDetector(
-              onTap: products![0].stock == "In Stock" ? () => _addCart() : null, // Disable button if no stock
+              onTap: products![0].stock == "In Stock" ? () => _checkLoginAndAddToCart() : null, // Check login before adding to cart
               child: Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: products![0].stock == "In Stock" ? CustomColor.primaryColor : Colors.grey, // Change color for no stock
+                  color: products![0].stock == "In Stock" ? CustomColor.primaryColor : Colors.grey,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Center(
@@ -413,8 +413,57 @@ class _ProductdetailState extends State<Productdetail> {
             ),
           ),
 
+
         ],
       ),
+    );
+  }
+  void _checkLoginAndAddToCart() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? customerId = prefs.getString('customer_id');
+
+    if (customerId == null || customerId.isEmpty) {
+      _showLoginAlert();  // If not logged in, show the alert
+    } else {
+      _addCart();  // If logged in, proceed with adding the product to the cart
+    }
+  }
+
+  void _showLoginAlert() {
+    // Set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text('Cancel', style: TextStyle(color: Colors.red)),
+      onPressed: () {
+        Navigator.pop(context);  // Close the alert dialog
+      },
+    );
+    Widget loginButton = TextButton(
+      child: Text('Login', style: TextStyle(color: Colors.green)),
+      onPressed: () {
+        Navigator.pop(context);  // Close the dialog and navigate to the login screen
+        Navigator.pushNamed(context, '/loginscreen');  // Navigate to login screen
+      },
+    );
+
+    // Set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      title: Text('Login Required', style: TextStyle(fontSize: 18)),
+      content: Text('You must log in to add items to the cart.', style: TextStyle(fontSize: 13, color: Colors.black)),
+      actions: [
+        cancelButton,
+        loginButton,
+      ],
+    );
+
+    // Show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
