@@ -5,6 +5,7 @@ import 'package:fishtohome/colors/Colors.dart';
 import 'package:fishtohome/restAPI/API.dart';
 import 'package:fishtohome/modals/Banner_modal.dart';
 import 'package:fishtohome/screens/list/catalog_product_list.dart';
+import '../data/sharedpreferences.dart';
 import '../modals/Headerimages_modal.dart';
 import '../modals/Category_modal.dart';
 import 'package:fishtohome/modals/Category_product_modal.dart';
@@ -36,7 +37,9 @@ import '../../../constants.dart';
 import '../screens/list/category_product_list.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fishtohome/screens/list/horizontal_listview.dart';
-import 'dart:ui'; // Import this for Color class
+import 'dart:ui';
+
+import 'login_screen.dart'; // Import this for Color class
 
 
 class Dashboard extends StatefulWidget {
@@ -48,7 +51,8 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   bool isLoading = true;
-
+  bool _isLoggedIn = false;
+  Userpreferences userPreferences = Userpreferences(); // Instantiate your Userpreferences class
   List<Banners> ?banners=[];
   List<HeaderImages> ?headerimages=[];
   List<BestProducts> ?bestProducts = [];
@@ -73,12 +77,33 @@ class _DashboardState extends State<Dashboard> {
 
     _getCatalogProducts();
     //_getCategoryProducts();
+    _checkLoginStatus();  // Check login status when widget is initialized
 
+  }
+
+  Future<void> _checkLoginStatus() async {
+    String? token = await userPreferences.getToken();  // Use getToken from your Userpreferences
+    setState(() {
+      _isLoggedIn = token != null;  // If token exists, user is logged in
+    });
+  }
+
+
+  void _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // Clear all session data
+
+    // Navigate to the login screen and clear back stack
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => Loginscreen()),
+          (Route<dynamic> route) => false,
+    );
   }
 
 
 
- _getBannersData() async {
+  _getBannersData() async {
    setState(() {
      isLoading = true;
    });
@@ -259,11 +284,12 @@ _getHeaderImagesData() async {
 }
 
 
+
+
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-
       drawer: Drawer(
         child: ListView(
           children: [
@@ -277,183 +303,214 @@ _getHeaderImagesData() async {
             ),
             Column(
               children: [
+                // Categories are available for both logged-in and not logged-in users
                 ListTile(
                   leading: Icon(
                     Icons.category,
                     color: CustomColor.accentColor,
                     size: 25,
                   ),
-                  title: const Text('Categories',style: TextStyle(color: Colors.black38,fontSize: 15),),
+                  title: const Text('Categories',
+                      style: TextStyle(color: Colors.black38, fontSize: 15)),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => Categorylist(),
-                    ),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Categorylist(),
+                      ),
                     );
                   },
                 ),
 
-                ListTile(
-                  leading: Icon(
-                    Icons.storage_rounded ,
-                    color: CustomColor.accentColor,
-                    size: 25,
-                  ),
-                  title: const Text('Orders',style: TextStyle(color: Colors.black38,fontSize: 15),),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => Ordrslist(),
+                // Show these options only when the user is logged in
+                if (_isLoggedIn) ...[
+                  ListTile(
+                    leading: Icon(
+                      Icons.storage_rounded,
+                      color: CustomColor.accentColor,
+                      size: 25,
                     ),
-                    );
-                  },
-                ),
-
-                ListTile(
-                  leading: Icon(
-                    Icons.house,
-                    color: CustomColor.accentColor,
-                    size: 25,
+                    title: const Text('Orders',
+                        style: TextStyle(color: Colors.black38, fontSize: 15)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Ordrslist(),
+                        ),
+                      );
+                    },
                   ),
-                  title: const Text('Address Book',style: TextStyle(color: Colors.black38,fontSize: 15),),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => Addressbook(),
+                  ListTile(
+                    leading: Icon(
+                      Icons.house,
+                      color: CustomColor.accentColor,
+                      size: 25,
                     ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.lock,
-                    color: CustomColor.accentColor,
-                    size: 25,
+                    title: const Text('Address Book',
+                        style: TextStyle(color: Colors.black38, fontSize: 15)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Addressbook(),
+                        ),
+                      );
+                    },
                   ),
-                  title: const Text('Change Password',style: TextStyle(color: Colors.black38,fontSize: 15),),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => Passwordchange(),
+                  ListTile(
+                    leading: Icon(
+                      Icons.lock,
+                      color: CustomColor.accentColor,
+                      size: 25,
                     ),
-                    );
-                  },
-                ),
+                    title: const Text('Change Password',
+                        style: TextStyle(color: Colors.black38, fontSize: 15)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Passwordchange(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.delete,
+                      color: CustomColor.accentColor,
+                      size: 25,
+                    ),
+                    title: const Text('Delete Account',
+                        style: TextStyle(color: Colors.black38, fontSize: 15)),
 
+                    onTap: () => {
+                      _AccountDeletion(context),
+                    },
+                  ),
+                ],
+
+                // Show Login or Logout based on login status
                 ListTile(
                   leading: Icon(
-                    Icons.logout,
+                    _isLoggedIn ? Icons.logout : Icons.login,
                     color: CustomColor.accentColor,
                     size: 25,
                   ),
-                  title: const Text('Log out',style: TextStyle(color: Colors.black38,fontSize: 15),),
-                  onTap: ()  async {
-                    SharedPreferences preferences = await SharedPreferences.getInstance();
-                    await preferences.clear();
-                    Navigator.pushReplacementNamed(context, "/loginscreen");
+                  title: Text(
+                    _isLoggedIn ? 'Log out' : 'Log in',
+                    style: const TextStyle(
+                        color: Colors.black38, fontSize: 15),
+                  ),
+                  onTap: () {
+                    if (_isLoggedIn) {
+                      _logout();  // If logged in, log out the user
+                    } else {
+                      Navigator.pushReplacementNamed(
+                          context, "/loginscreen");  // Go to login screen
+                    }
                   },
                 ),
-
-
-
-
               ],
             ),
-            SizedBox(height: 85,),
-      Container(
-        height: 170,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Colors.grey[900]!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0, 3),
-              blurRadius: 6,
+            SizedBox(height: 85),
+            Container(
+              height: 170,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.grey[900]!],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0, 3),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, color: Colors.redAccent, size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          '3080 Dorchester Road, Niagara Falls, Ontario, L2J 2Z7',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.phone, color: Colors.greenAccent, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        '+1 647 470 8577',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.email, color: Colors.blueAccent, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'info@fishtohome.ca',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.location_on, color: Colors.redAccent, size: 20),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    '3080 Dorchester Road, Niagara Falls, Ontario, L2J 2Z7',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.phone, color: Colors.greenAccent, size: 20),
-                SizedBox(width: 8),
-                Text(
-                  '+1 647 470 8577',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.email, color: Colors.blueAccent, size: 20),
-                SizedBox(width: 8),
-                Text(
-                  'info@fishtohome.ca',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-
-      ],
         ),
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Image.asset('assets/images/logo.png', width:75,height: 50,),
+        title: Image.asset('assets/images/logo.png', width: 75, height: 50),
         iconTheme: IconThemeData(color: Colors.black),
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
               color: Colors.black,
-
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => Searchproduct(),
-              ),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Searchproduct(),
+                ),
               );
-              // do something
             },
           ),
           IconButton(
             icon: Icon(
               Icons.shopping_cart,
-              color: Color(0xFF1051AB) ,
+              color: Color(0xFF1051AB),
             ),
             onPressed: () {
               Navigator.push(
@@ -464,12 +521,10 @@ _getHeaderImagesData() async {
               );
             },
           ),
-
-
           IconButton(
             icon: Icon(
               Icons.favorite,
-              color: Color(0xFF1051AB) ,
+              color: Color(0xFF1051AB),
             ),
             onPressed: () {
               Navigator.push(
@@ -482,11 +537,11 @@ _getHeaderImagesData() async {
           ),
         ],
       ),
-
       body: isLoading
           ? Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(CustomColor.accentColor),
+          valueColor: AlwaysStoppedAnimation<Color>(
+              CustomColor.accentColor),
         ),
       )
           : Column(
@@ -497,29 +552,22 @@ _getHeaderImagesData() async {
                 _Banners(),
                 SizedBox(height: 10),
                 _categoryWidget(),
-               // _CategoryTextWidget(),
-              //_CategoriesImages(),
                 _Typebuild(),
                 SizedBox(height: 10),
                 _catalogProductsTextWidget(),
                 _catalogproductsWidget(),
-                //_featureProductsTextWidget(),
-                //_featureproductsWidget(),
               ],
             ),
           ),
-
           Footerwidget(),
         ],
       ),
-
     );
-
   }
 
 
 
-  _Banners() {
+_Banners() {
     return banners != null && banners!.isNotEmpty
         ? ImageSlideshow(
       width: double.infinity,
@@ -862,5 +910,108 @@ _getHeaderImagesData() async {
       ],
     );
   }
+
+  void _AccountDeletion(context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text('No', style: TextStyle(color: Colors.green)),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text('Yes', style: TextStyle(color: Colors.green)),
+      onPressed: () {
+        Navigator.pop(context); // Close the dialog before starting the process
+        _removeAccount();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      title: Text('Confirm', style: TextStyle(fontSize: 18)),
+      content: Text('Do you want to remove your account ?', style: TextStyle(fontSize: 13, color: Colors.black)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void _removeAccount() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? customerId = prefs.getString('customer_id');
+
+    if (customerId == null || customerId.isEmpty) {
+      // Show an alert to the user that they are not logged in
+      _showMessage('User not logged in', Colors.red);
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
+
+    String url = ApiUrl.accountDelete;
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      Response response = await post(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: json.encode({
+          'customer_id': customerId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        if (responseData['status'] == true) {
+          // Account removed successfully
+          _showMessage(responseData['message'] ?? 'Account deleted successfully', Colors.green);
+
+          // Clear user data and navigate to login page
+          await prefs.clear();
+          Navigator.pushReplacementNamed(context, '/loginscreen');
+        } else {
+          _showMessage(responseData['message'] ?? 'Account deletion failed', Colors.red);
+        }
+      } else {
+        _showMessage('Failed to remove account. Please try again.', Colors.red);
+      }
+    } catch (error) {
+      _showMessage('An error occurred. Please try again.', Colors.red);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _showMessage(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
 
 }
