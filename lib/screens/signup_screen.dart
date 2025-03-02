@@ -436,7 +436,7 @@ class _SignupscreenState extends State<Signupscreen> {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
         if (responseData['success'] == true) {
-          _showMyDialog('Account created successfully');
+          _showMessage(responseData['message'] ?? 'Account deleted successfully', Colors.green);
           Navigator.pushReplacementNamed(context, "/loginscreen");
         } else {
           // Show server-side error
@@ -458,7 +458,15 @@ class _SignupscreenState extends State<Signupscreen> {
   }
 
 
-
+  void _showMessage(String message, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
   Future<void> _showMyDialog(msg) async {
     return showDialog<void>(
       context: context,
