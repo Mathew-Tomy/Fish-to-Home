@@ -25,9 +25,59 @@ class _WishlistState extends State<Wishlist> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getWishlist();
+    _checkLoginAndFetchCart();
+  }
+// Check if user is logged in, if not, show login alert
+  void _checkLoginAndFetchCart() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? customerId = prefs.getString('customer_id');
+
+    if (customerId == null || customerId.isEmpty) {
+      _showLoginAlert();  // Show login alert if not logged in
+    } else {
+      _getWishlist(); // If logged in, fetch the wishlist
+    }
   }
 
+  // Show login alert if the user is not logged in
+  void _showLoginAlert() {
+    // Set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text('Cancel', style: TextStyle(color: Colors.red)),
+      onPressed: () {
+        Navigator.pop(context);  // Close the alert dialog
+        Navigator.pushNamed(context, '/dashboard');  // Navigate to login screen
+      },
+    );
+    Widget loginButton = TextButton(
+      child: Text('Login', style: TextStyle(color: Colors.green)),
+      onPressed: () {
+        Navigator.pop(context);  // Close the dialog and navigate to the login screen
+        Navigator.pushNamed(context, '/loginscreen');  // Navigate to login screen
+      },
+    );
+
+    // Set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      title: Text('Login Required', style: TextStyle(fontSize: 18)),
+      content: Text('You must log in to view your wishlists.', style: TextStyle(fontSize: 13, color: Colors.black)),
+      actions: [
+        cancelButton,
+        loginButton,
+      ],
+    );
+
+    // Show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   _getWishlist() async {
     setState(() {
       isLoading = true; // Start loading
